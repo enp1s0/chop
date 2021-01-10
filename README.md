@@ -1,4 +1,4 @@
-# chop-mantissa
+# chopfp
 
 A header-only library for chopping a mantissa of a given floating point
 
