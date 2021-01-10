@@ -12,5 +12,9 @@ This library supports these roungings:
 ## Requirements
 - C++ >= 17 (This library uses `if constexpr`)
 
+## Supported device
+- CPUs (tested on x86_64)
+- GPUs (tested on NVIDIA GPU)
+
 ## License
 Released under the MIT license
