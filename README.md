@@ -1,4 +1,4 @@
-# chop-mantissa
+# chopfp
 
 A header-only library for chopping a mantissa of a given floating point
 
@@ -19,12 +19,12 @@ This library supports these roungings:
 ## Sample code
 ```cpp
 // sample.cpp
-// g++ -I./path/to/chop/include sample.cpp -std=c++17
-#include <chop/chop.hpp>
+// g++ -I./path/to/chopfp/include sample.cpp -std=c++17
+#include <chopfp/chopfp.hpp>
 
 int main() {
 	const float a = 1.f / 3;
-	const auto chopped = mtk::chop::chop<mtk::chop::RN>(a, 10);
+	const auto chopped = mtk::chopfp::chop<mtk::chop::RN>(a, 10);
 }
 ```
 

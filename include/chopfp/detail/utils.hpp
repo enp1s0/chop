@@ -4,7 +4,7 @@
 #include "macro.hpp"
 
 namespace mtk {
-namespace chop {
+namespace chopfp {
 namespace detail {
 template <class FP_T, class BS_T>
 union reinterpret_medium {

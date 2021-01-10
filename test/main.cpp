@@ -1,21 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <chop/chop.hpp>
-#include <chop/debug.hpp>
+#include <chopfp/chopfp.hpp>
+#include <chopfp/debug.hpp>
 
 namespace {
-std::string get_rounding_name_string(const mtk::chop::rounding_type rounding) {
+std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) {
 	switch (rounding) {
-	case mtk::chop::RN:
+	case mtk::chopfp::RN:
 		return "RN";
-	case mtk::chop::RN_01:
+	case mtk::chopfp::RN_01:
 		return "RN_01";
-	case mtk::chop::RZ:
+	case mtk::chopfp::RZ:
 		return "RZ";
-	case mtk::chop::RU:
+	case mtk::chopfp::RU:
 		return "RU";
-	case mtk::chop::RD:
+	case mtk::chopfp::RD:
 		return "RD";
 	default:
 		return "Unknown";
@@ -28,7 +28,7 @@ template <> std::string get_type_name_string<double>() {return "double";}
 
 template <class T>
 struct test_case {
-	using bs_t = typename mtk::chop::detail::same_size_uint<T>::type;
+	using bs_t = typename mtk::chopfp::detail::same_size_uint<T>::type;
 	const bs_t input;
 	const bs_t output;
 	const unsigned leaving_length;
@@ -37,30 +37,30 @@ struct test_case {
 		input(input), output(output), leaving_length(leaving_length){}
 };
 
-template <mtk::chop::rounding_type rounding, class T>
+template <mtk::chopfp::rounding_type rounding, class T>
 unsigned check(const std::vector<test_case<T>>& test_cases) {
 	unsigned num_correct = 0;
 	for (const auto& test_case : test_cases) {
-		const auto chopped = mtk::chop::detail::reinterpret_as_uint(mtk::chop::chop<rounding>(mtk::chop::detail::reinterpret_as_fp(test_case.input), test_case.leaving_length));
+		const auto chopped = mtk::chopfp::detail::reinterpret_as_uint(mtk::chopfp::chop<rounding>(mtk::chopfp::detail::reinterpret_as_fp(test_case.input), test_case.leaving_length));
 		const auto expected = test_case.output;
 		const auto result = (expected == chopped);
 		if (result) {
 			num_correct++;
 		} else {
 			std::printf("! - FAILED -\n");
-			std::printf("INPUT    : ");mtk::chop::debug::print_bin(test_case.input);
-			std::printf("EXPECTED : ");mtk::chop::debug::print_bin(expected);
-			std::printf("CHOPPED  : ");mtk::chop::debug::print_bin(chopped);
+			std::printf("INPUT    : ");mtk::chopfp::debug::print_bin(test_case.input);
+			std::printf("EXPECTED : ");mtk::chopfp::debug::print_bin(expected);
+			std::printf("CHOPPED  : ");mtk::chopfp::debug::print_bin(chopped);
 		}
 	}
 	return num_correct;
 }
 
-template <mtk::chop::rounding_type rounding, class T>
+template <mtk::chopfp::rounding_type rounding, class T>
 std::vector<test_case<T>> make_test_cases();
 
 template <>
-std::vector<test_case<float>> make_test_cases<mtk::chop::RN, float>() {
+std::vector<test_case<float>> make_test_cases<mtk::chopfp::RN, float>() {
 	std::vector<test_case<float>> test_cases;
 	test_cases.push_back(test_case<float>{
 		0b0'01111111'00000000000000000000000u,
@@ -98,7 +98,7 @@ std::vector<test_case<float>> make_test_cases<mtk::chop::RN, float>() {
 
 
 template <>
-std::vector<test_case<float>> make_test_cases<mtk::chop::RN_01, float>() {
+std::vector<test_case<float>> make_test_cases<mtk::chopfp::RN_01, float>() {
 	std::vector<test_case<float>> test_cases;
 	test_cases.push_back(test_case<float>{
 		0b0'01111111'00000000000000000000000u,
@@ -135,7 +135,7 @@ std::vector<test_case<float>> make_test_cases<mtk::chop::RN_01, float>() {
 }
 
 template <>
-std::vector<test_case<double>> make_test_cases<mtk::chop::RN, double>() {
+std::vector<test_case<double>> make_test_cases<mtk::chopfp::RN, double>() {
 	std::vector<test_case<double>> test_cases;
 	test_cases.push_back(test_case<double>{
 		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
@@ -172,7 +172,7 @@ std::vector<test_case<double>> make_test_cases<mtk::chop::RN, double>() {
 }
 
 template <>
-std::vector<test_case<double>> make_test_cases<mtk::chop::RN_01, double>() {
+std::vector<test_case<double>> make_test_cases<mtk::chopfp::RN_01, double>() {
 	std::vector<test_case<double>> test_cases;
 	test_cases.push_back(test_case<double>{
 		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
@@ -208,7 +208,7 @@ std::vector<test_case<double>> make_test_cases<mtk::chop::RN_01, double>() {
 	return test_cases;
 }
 
-template <mtk::chop::rounding_type rounding, class T>
+template <mtk::chopfp::rounding_type rounding, class T>
 void test() {
 	std::printf("test for (%6s, %5s)... ", get_type_name_string<T>().c_str(), get_rounding_name_string(rounding).c_str());
 	const auto test_cases = make_test_cases<rounding, T>();
@@ -223,8 +223,8 @@ void test() {
 } // namespace
 
 int main() {
-	test<mtk::chop::RN   , float >();
-	test<mtk::chop::RN   , double>();
-	test<mtk::chop::RN_01, float >();
-	test<mtk::chop::RN_01, double>();
+	test<mtk::chopfp::RN   , float >();
+	test<mtk::chopfp::RN   , double>();
+	test<mtk::chopfp::RN_01, float >();
+	test<mtk::chopfp::RN_01, double>();
 }

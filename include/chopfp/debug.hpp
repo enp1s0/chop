@@ -4,7 +4,7 @@
 #include "detail/macro.hpp"
 #include "detail/utils.hpp"
 namespace mtk {
-namespace chop {
+namespace chopfp {
 namespace debug {
 template <class T>
 FUNC_MACRO inline void print_hex(const T v, const bool line_break = true);
