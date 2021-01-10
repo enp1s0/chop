@@ -21,7 +21,7 @@ enum rounding_type {
 template <rounding_type rounding, class T>
 FUNC_MACRO T chop(const T v, const unsigned leaving_length) {
 	// Nothing to do
-	if (leaving_length >= detail::get_mantissa_size<T>()) {
+	if (leaving_length >= detail::get_mantissa_size<T>() || leaving_length == 0) {
 		return v;
 	}
 	// If Nan then Nan
