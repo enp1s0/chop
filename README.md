@@ -6,7 +6,7 @@ This library supports these roungings:
 - [x] `RN` (IEEE 754, Nearest even)
 - [x] `RN_01` (IEEE 754, Away from zero)
 - [x] `RZ` (IEEE 754, Toward 0)
-- [ ] `RU` (IEEE 754, Toward +Inf)
+- [x] `RU` (IEEE 754, Toward +Inf)
 - [ ] `RD` (IEEE 754, Toward -Inf)
 
 ## Requirements
@@ -27,6 +27,8 @@ int main() {
 	const auto chopped = mtk::chopfp::chop<mtk::chop::RN>(a, 10);
 }
 ```
+
+The function `chop<r>(const T v, const unsigned l)` chops a given floating point number `b` leaving `l` bits of mantissa bitstrings with rounding `r`.
 
 ## License
 Released under the MIT license

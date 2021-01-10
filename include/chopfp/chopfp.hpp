@@ -6,6 +6,7 @@
 #include "detail/rn.hpp"
 #include "detail/rn_01.hpp"
 #include "detail/rz.hpp"
+#include "detail/ru.hpp"
 
 namespace mtk {
 namespace chopfp {
@@ -20,7 +21,7 @@ enum rounding_type {
 template <rounding_type rounding, class T>
 FUNC_MACRO T chop(const T v, const unsigned leaving_length) {
 	// Nothing to do
-	if (leaving_length >= detail::get_mantissa_size<T>()) {
+	if (leaving_length >= detail::get_mantissa_size<T>() || leaving_length == 0) {
 		return v;
 	}
 	// If Nan then Nan
@@ -36,6 +37,7 @@ FUNC_MACRO T chop(const T v, const unsigned leaving_length) {
 	} else if constexpr (rounding == rounding_type::RZ) {
 		result = detail::chop_rz(v, leaving_length);
 	} else if constexpr (rounding == rounding_type::RU) {
+		result = detail::chop_ru(v, leaving_length);
 	} else if constexpr (rounding == rounding_type::RD) {
 	}
 	return result;

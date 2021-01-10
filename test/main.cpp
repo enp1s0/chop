@@ -171,6 +171,43 @@ std::vector<test_case<float>> make_test_cases<mtk::chopfp::RZ, float>() {
 }
 
 template <>
+std::vector<test_case<float>> make_test_cases<mtk::chopfp::RU, float>() {
+	std::vector<test_case<float>> test_cases;
+	test_cases.push_back(test_case<float>{
+		0b0'01111111'00000000000000000000000u,
+		0b0'01111111'00000000000000000000000u,
+		0
+	});
+	test_cases.push_back(test_case<float>{
+		0b0'01111111'00000000000000000000000u,
+		0b0'01111111'00000000000000000000000u,
+		100
+	});
+	test_cases.push_back(test_case<float>{
+		0b0'01111111'0000000000'0000000000000u,
+		0b0'01111111'0000000001'0000000000000u,
+		10
+	});
+	test_cases.push_back(test_case<float>{
+		0b0'01111111'1111111111'0000000000000u,
+		0b0'10000000'0000000000'0000000000000u,
+		10
+	});
+	test_cases.push_back(test_case<float>{
+		0b1'01111111'0000000000'0000000000000u,
+		0b1'01111111'0000000000'0000000000000u,
+		10
+	});
+	test_cases.push_back(test_case<float>{
+		0b1'01111111'1111111111'0000000000000u,
+		0b1'01111111'1111111111'0000000000000u,
+		10
+	});
+
+	return test_cases;
+}
+
+template <>
 std::vector<test_case<double>> make_test_cases<mtk::chopfp::RN, double>() {
 	std::vector<test_case<double>> test_cases;
 	test_cases.push_back(test_case<double>{
@@ -281,6 +318,43 @@ std::vector<test_case<double>> make_test_cases<mtk::chopfp::RZ, double>() {
 	return test_cases;
 }
 
+template <>
+std::vector<test_case<double>> make_test_cases<mtk::chopfp::RU, double>() {
+	std::vector<test_case<double>> test_cases;
+	test_cases.push_back(test_case<double>{
+		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
+		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
+		0
+	});
+	test_cases.push_back(test_case<double>{
+		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
+		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
+		100
+	});
+	test_cases.push_back(test_case<double>{
+		0b1'01111111111'0000000000'000000000000000000000000000000000000000000lu,
+		0b1'01111111111'0000000000'000000000000000000000000000000000000000000lu,
+		10
+	});
+	test_cases.push_back(test_case<double>{
+		0b1'01111111111'1111111111'000000000000000000000000000000000000000000lu,
+		0b1'01111111111'1111111111'000000000000000000000000000000000000000000lu,
+		10
+	});
+	test_cases.push_back(test_case<double>{
+		0b0'01111111111'0000000000'000000000000000000000000000000000000000000lu,
+		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
+		10
+	});
+	test_cases.push_back(test_case<double>{
+		0b0'01111111111'1111111111'000000000000000000000000000000000000000000lu,
+		0b0'10000000000'0000000000'000000000000000000000000000000000000000000lu,
+		10
+	});
+
+	return test_cases;
+}
+
 template <mtk::chopfp::rounding_type rounding, class T>
 void test() {
 	std::printf("test for (%6s, %5s)... ", get_type_name_string<T>().c_str(), get_rounding_name_string(rounding).c_str());
@@ -302,4 +376,6 @@ int main() {
 	test<mtk::chopfp::RN_01, double>();
 	test<mtk::chopfp::RZ   , float >();
 	test<mtk::chopfp::RZ   , double>();
+	test<mtk::chopfp::RU   , float >();
+	test<mtk::chopfp::RU   , double>();
 }
