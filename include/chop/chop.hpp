@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "detail/macro.hpp"
 #include "detail/utils.hpp"
+#include "detail/rn.hpp"
 
 namespace mtk {
 namespace chop {
@@ -14,10 +15,20 @@ enum rounding_type {
 	RD
 };
 
-template <class T, rounding_type rounding>
-FUNC_MACRO T chop(const T v) {
-	T result;
+template <rounding_type rounding, class T>
+FUNC_MACRO T chop(const T v, const unsigned leaving_length) {
+	// Nothing to do
+	if (leaving_length >= detail::get_mantissa_size<T>()) {
+		return v;
+	}
+	// Inf or Nan
+	if (v != v) {
+		return v;
+	}
+
+	T result = static_cast<T>(0);
 	if constexpr (rounding == rounding_type::RN) {
+		result = detail::chop_rn(v, leaving_length);
 	} else if constexpr (rounding == rounding_type::RN_01) {
 	} else if constexpr (rounding == rounding_type::RZ) {
 	} else if constexpr (rounding == rounding_type::RU) {
