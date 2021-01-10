@@ -6,7 +6,7 @@ This library supports these roungings:
 - [x] `RN` (IEEE 754, Nearest even)
 - [x] `RN_01` (IEEE 754, Away from zero)
 - [x] `RZ` (IEEE 754, Toward 0)
-- [ ] `RU` (IEEE 754, Toward +Inf)
+- [x] `RU` (IEEE 754, Toward +Inf)
 - [ ] `RD` (IEEE 754, Toward -Inf)
 
 ## Requirements
