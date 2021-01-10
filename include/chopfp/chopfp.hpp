@@ -7,6 +7,7 @@
 #include "detail/rn_01.hpp"
 #include "detail/rz.hpp"
 #include "detail/ru.hpp"
+#include "detail/rd.hpp"
 
 namespace mtk {
 namespace chopfp {
@@ -39,6 +40,7 @@ FUNC_MACRO T chop(const T v, const unsigned leaving_length) {
 	} else if constexpr (rounding == rounding_type::RU) {
 		result = detail::chop_ru(v, leaving_length);
 	} else if constexpr (rounding == rounding_type::RD) {
+		result = detail::chop_rd(v, leaving_length);
 	}
 	return result;
 }
