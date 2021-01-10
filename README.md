@@ -16,6 +16,10 @@ This library supports these roungings:
 - CPUs (tested on x86_64)
 - GPUs (tested on NVIDIA GPU)
 
+## Supported floating point format
+- `float` (IEEE 754 Binary32)
+- `double` (IEEE 754 Binary64)
+
 ## Sample code
 ```cpp
 // sample.cpp
