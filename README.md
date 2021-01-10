@@ -1,10 +1,10 @@
 # chop-mantissa
 
-A header only library for chopping a mantissa of a given floating point
+A header-only library for chopping a mantissa of a given floating point
 
 This library supports these roungings:
 - [x] `RN` (IEEE 754, Nearest even)
-- [ ] `RN_01` (IEEE 754, Away from zero)
+- [x] `RN_01` (IEEE 754, Away from zero)
 - [ ] `RZ` (IEEE 754, Toward 0)
 - [ ] `RU` (IEEE 754, Toward +Inf)
 - [ ] `RD` (IEEE 754, Toward -Inf)
