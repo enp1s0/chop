@@ -5,7 +5,7 @@
 #include "utils.hpp"
 
 namespace mtk {
-namespace chop {
+namespace chopfp {
 namespace detail {
 template <class T>
 FUNC_MACRO T chop_rn(const T v, const unsigned leaving_length) {

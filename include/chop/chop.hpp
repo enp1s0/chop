@@ -7,7 +7,7 @@
 #include "detail/rn_01.hpp"
 
 namespace mtk {
-namespace chop {
+namespace chopfp {
 enum rounding_type {
 	RN,
 	RN_01,
