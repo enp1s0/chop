@@ -8,3 +8,9 @@ This library supports these roungings:
 - [ ] `RZ` (IEEE 754, Toward 0)
 - [ ] `RU` (IEEE 754, Toward +Inf)
 - [ ] `RD` (IEEE 754, Toward -Inf)
+
+## Requirements
+- C++ >= 17 (This library uses `if constexpr`)
+
+## License
+Released under the MIT license
