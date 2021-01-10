@@ -1,8 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include <chop/chop.hpp>
-#include <chop/debug.hpp>
+#include <chopfp/chopfp.hpp>
+#include <chopfp/debug.hpp>
 
 namespace {
 std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) {
