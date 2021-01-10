@@ -15,7 +15,6 @@ FUNC_MACRO T chop_ru(const T v, const unsigned leaving_length) {
 	const auto bs_mantissa_0 = detail::mask_mantissa(v);
 	const auto bs_mantissa = bs_mantissa_0 | (decltype(bs_mantissa_0)(1) << detail::get_mantissa_size<T>());
 
-	// Decide roungind up
 	const auto move_up = decltype(bs_mantissa)(1) - (detail::mask_sign(v) >> (detail::get_exponent_size<T>() + detail::get_mantissa_size<T>()));
 
 	// Move up if necessary

@@ -1,20 +1,21 @@
-#ifndef __MTK_CHOP_DETAIL_RN_01_HPP__
-#define __MTK_CHOP_DETAIL_RN_01_HPP__
+#ifndef __MTK_CHOP_DETAIL_RD_HPP__
+#define __MTK_CHOP_DETAIL_RD_HPP__
 #include <cmath>
 #include "macro.hpp"
 #include "utils.hpp"
+
+#include "../debug.hpp"
 
 namespace mtk {
 namespace chopfp {
 namespace detail {
 template <class T>
-FUNC_MACRO T chop_rn_01(const T v, const unsigned leaving_length) {
+FUNC_MACRO T chop_rd(const T v, const unsigned leaving_length) {
 	const unsigned shift = detail::get_mantissa_size<T>() - leaving_length;
 	const auto bs_mantissa_0 = detail::mask_mantissa(v);
 	const auto bs_mantissa = bs_mantissa_0 | (decltype(bs_mantissa_0)(1) << detail::get_mantissa_size<T>());
 
-	const auto u1 = (bs_mantissa >> (shift - 1)) & 0x1;
-	const auto move_up = u1;
+	const auto move_up = detail::mask_sign(v) >> (detail::get_exponent_size<T>() + detail::get_mantissa_size<T>());
 
 	// Move up if necessary
 	const auto result_bs_mantissa_0 = ((bs_mantissa >> shift) + move_up) << shift;

@@ -7,7 +7,7 @@ This library supports these roungings:
 - [x] `RN_01` (IEEE 754, Away from zero)
 - [x] `RZ` (IEEE 754, Toward 0)
 - [x] `RU` (IEEE 754, Toward +Inf)
-- [ ] `RD` (IEEE 754, Toward -Inf)
+- [x] `RD` (IEEE 754, Toward -Inf)
 
 ## Requirements
 - C++ >= 17 (This library uses `if constexpr`)
@@ -15,6 +15,10 @@ This library supports these roungings:
 ## Supported device
 - CPUs (tested on x86_64)
 - GPUs (tested on NVIDIA GPU)
+
+## Supported floating point format
+- `float` (IEEE 754 Binary32)
+- `double` (IEEE 754 Binary64)
 
 ## Sample code
 ```cpp
