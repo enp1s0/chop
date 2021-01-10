@@ -41,9 +41,16 @@ template <mtk::chop::rounding_type rounding, class T>
 unsigned check(const std::vector<test_case<T>>& test_cases) {
 	unsigned num_correct = 0;
 	for (const auto& test_case : test_cases) {
-		const auto result = (mtk::chop::detail::reinterpret_as_uint(mtk::chop::chop<rounding>(mtk::chop::detail::reinterpret_as_fp(test_case.input), test_case.leaving_length)) == test_case.output);
+		const auto chopped = mtk::chop::detail::reinterpret_as_uint(mtk::chop::chop<rounding>(mtk::chop::detail::reinterpret_as_fp(test_case.input), test_case.leaving_length));
+		const auto expected = test_case.output;
+		const auto result = (expected == chopped);
 		if (result) {
 			num_correct++;
+		} else {
+			std::printf("! - FAILED -\n");
+			std::printf("INPUT    : ");mtk::chop::debug::print_bin(test_case.input);
+			std::printf("EXPECTED : ");mtk::chop::debug::print_bin(expected);
+			std::printf("CHOPPED  : ");mtk::chop::debug::print_bin(chopped);
 		}
 	}
 	return num_correct;
