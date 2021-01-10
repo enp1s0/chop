@@ -28,5 +28,7 @@ int main() {
 }
 ```
 
+The function `chop<r>(const T v, const unsigned l)` chops a given floating point number `b` leaving `l` bits of mantissa bitstrings with rounding `r`.
+
 ## License
 Released under the MIT license
