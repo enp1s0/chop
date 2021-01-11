@@ -3,6 +3,9 @@
 #include <utility>
 #include <chopfp/chopfp.hpp>
 #include <chopfp/debug.hpp>
+#ifdef TEST_BINARY16
+#include <chopfp/binary16.hpp>
+#endif
 
 namespace {
 std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) {
@@ -45,7 +48,7 @@ template <mtk::chopfp::rounding_type rounding, class T>
 unsigned check(const std::vector<test_case<T>>& test_cases) {
 	unsigned num_correct = 0;
 	for (const auto& test_case : test_cases) {
-		const auto chopped = mtk::chopfp::detail::reinterpret_as_uint(mtk::chopfp::chop<rounding>(mtk::chopfp::detail::reinterpret_as_fp(test_case.input), test_case.leaving_length));
+		const auto chopped = mtk::chopfp::detail::reinterpret_as_uint(mtk::chopfp::chop<rounding>(mtk::chopfp::detail::reinterpret_as_fp<typename mtk::chopfp::detail::same_size_uint<T>::type, T>(test_case.input), test_case.leaving_length));
 		const auto expected = test_case.output;
 		const auto result = (expected == chopped);
 		if (result) {
@@ -63,7 +66,9 @@ unsigned check(const std::vector<test_case<T>>& test_cases) {
 template <mtk::chopfp::rounding_type rounding, class T>
 std::vector<test_case<T>> make_test_cases();
 
+#ifdef TEST_BINARY16
 #include "binary16_testcases.hpp"
+#endif
 #include "binary32_testcases.hpp"
 #include "binary64_testcases.hpp"
 
@@ -83,13 +88,21 @@ void test() {
 
 int main() {
 	test<mtk::chopfp::RN   , float >();
-	test<mtk::chopfp::RN   , double>();
 	test<mtk::chopfp::RN_01, float >();
-	test<mtk::chopfp::RN_01, double>();
 	test<mtk::chopfp::RZ   , float >();
-	test<mtk::chopfp::RZ   , double>();
 	test<mtk::chopfp::RU   , float >();
-	test<mtk::chopfp::RU   , double>();
 	test<mtk::chopfp::RD   , float >();
+
+	test<mtk::chopfp::RN   , double>();
+	test<mtk::chopfp::RN_01, double>();
+	test<mtk::chopfp::RZ   , double>();
+	test<mtk::chopfp::RU   , double>();
 	test<mtk::chopfp::RD   , double>();
+#ifdef TEST_BINARY16
+	test<mtk::chopfp::RN   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RN_01, CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RZ   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RU   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RD   , CHOPFP_BINARY16_TYPENAME>();
+#endif
 }
