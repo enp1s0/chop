@@ -35,5 +35,21 @@ int main() {
 
 The function `chop<r>(const T v, const unsigned l)` chops a given floating point number `b` leaving `l` bits of mantissa bitstrings with rounding `r`.
 
+### Binary16
+```cpp
+// sample.cpp
+#include <chopfp/chopfp.hpp>
+#include <chopfp/binary16.hpp>
+
+// Specify the type name of binary16 if you want to change from default name.
+// The default name is `half`.
+#define CHOPFP_BINARY16_TYPENAME __fp16
+
+int main() {
+	const __fp16 a = 1.f / 3;
+	const auto chopped = mtk::chopfp::chop<mtk::chop::RN>(a, 10);
+}
+```
+
 ## License
 Released under the MIT license
