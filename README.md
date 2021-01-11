@@ -47,8 +47,8 @@ The function `chop<r>(const T v, const unsigned l)` chops a given floating point
 #include <chopfp/binary16.hpp>
 
 int main() {
-	const __fp16 a = 1.f / 3;
-	const auto chopped = mtk::chopfp::chop<mtk::chop::RN>(a, 10);
+	const __fp16 a = to_bianry16(1.f / 3);
+	const auto chopped = mtk::chopfp::chop<mtk::chop::RN>(a, 8);
 }
 ```
 
