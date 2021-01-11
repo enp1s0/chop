@@ -31,7 +31,7 @@ FUNC_MACRO T chop_rn(const T v, const unsigned leaving_length) {
 	const auto bs_result = detail::mask_sign(v)
 		| (result_bs_exponent << detail::get_mantissa_size<T>())
 		| (result_bs_mantissa & ((decltype(bs_mantissa_0)(1) << detail::get_mantissa_size<T>()) - 1));
-	return detail::reinterpret_as_fp(bs_result);
+	return detail::reinterpret_as_fp<typename detail::same_size_uint<T>::type, T>(bs_result);
 }
 } // namespace detail
 } // namesapce chop
