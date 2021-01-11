@@ -17,6 +17,7 @@ This library supports these roungings:
 - GPUs (tested on NVIDIA GPU)
 
 ## Supported floating point format
+- `half` (IEEE 754 Binary16, availbale if compiler supports it)
 - `float` (IEEE 754 Binary32)
 - `double` (IEEE 754 Binary64)
 
