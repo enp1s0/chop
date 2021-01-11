@@ -13,10 +13,11 @@ This library supports these roungings:
 - C++ >= 17 (This library uses `if constexpr`)
 
 ## Supported device
-- CPUs (tested on x86_64)
+- CPUs (tested on x86_64, arm)
 - GPUs (tested on NVIDIA GPU)
 
 ## Supported floating point format
+- `half` (IEEE 754 Binary16, availbale if compiler supports it)
 - `float` (IEEE 754 Binary32)
 - `double` (IEEE 754 Binary64)
 
@@ -33,6 +34,23 @@ int main() {
 ```
 
 The function `chop<r>(const T v, const unsigned l)` chops a given floating point number `b` leaving `l` bits of mantissa bitstrings with rounding `r`.
+
+### Binary16
+```cpp
+// sample.cpp
+#include <chopfp/chopfp.hpp>
+
+// Specify the type name of binary16 if you want to change from default name.
+// The default name is `half`.
+#define CHOPFP_BINARY16_TYPENAME __fp16
+
+#include <chopfp/binary16.hpp>
+
+int main() {
+	const __fp16 a = to_bianry16(1.f / 3);
+	const auto chopped = mtk::chopfp::chop<mtk::chop::RN>(a, 8);
+}
+```
 
 ## License
 Released under the MIT license

@@ -3,6 +3,9 @@
 #include <utility>
 #include <chopfp/chopfp.hpp>
 #include <chopfp/debug.hpp>
+#ifdef TEST_BINARY16
+#include <chopfp/binary16.hpp>
+#endif
 
 namespace {
 std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) {
@@ -23,8 +26,12 @@ std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) 
 }
 
 template <class T> std::string get_type_name_string();
-template <> std::string get_type_name_string<float >() {return "float" ;}
-template <> std::string get_type_name_string<double>() {return "double";}
+template <> std::string get_type_name_string<float >() {return "binary32";}
+template <> std::string get_type_name_string<double>() {return "binary64";}
+
+#ifdef TEST_BINARY16
+template <> std::string get_type_name_string<CHOPFP_BINARY16_TYPENAME>() {return "binary16";}
+#endif
 
 template <class T>
 struct test_case {
@@ -41,7 +48,7 @@ template <mtk::chopfp::rounding_type rounding, class T>
 unsigned check(const std::vector<test_case<T>>& test_cases) {
 	unsigned num_correct = 0;
 	for (const auto& test_case : test_cases) {
-		const auto chopped = mtk::chopfp::detail::reinterpret_as_uint(mtk::chopfp::chop<rounding>(mtk::chopfp::detail::reinterpret_as_fp(test_case.input), test_case.leaving_length));
+		const auto chopped = mtk::chopfp::detail::reinterpret_as_uint(mtk::chopfp::chop<rounding>(mtk::chopfp::detail::reinterpret_as_fp<typename mtk::chopfp::detail::same_size_uint<T>::type, T>(test_case.input), test_case.leaving_length));
 		const auto expected = test_case.output;
 		const auto result = (expected == chopped);
 		if (result) {
@@ -59,379 +66,15 @@ unsigned check(const std::vector<test_case<T>>& test_cases) {
 template <mtk::chopfp::rounding_type rounding, class T>
 std::vector<test_case<T>> make_test_cases();
 
-template <>
-std::vector<test_case<float>> make_test_cases<mtk::chopfp::RN, float>() {
-	std::vector<test_case<float>> test_cases;
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		0
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		100
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000001'1000000000000u,
-		0b0'01111111'0000000010'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000001'0000000000000u,
-		0b0'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000000'1000000000000u,
-		0b0'01111111'0000000000'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'1111111111'1000000000000u,
-		0b0'10000000'0000000000'0000000000000u,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<float>> make_test_cases<mtk::chopfp::RN_01, float>() {
-	std::vector<test_case<float>> test_cases;
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		0
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		100
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000001'1000000000000u,
-		0b0'01111111'0000000010'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000001'0000000000000u,
-		0b0'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000000'1000000000000u,
-		0b0'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'1111111111'1000000000000u,
-		0b0'10000000'0000000000'0000000000000u,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<float>> make_test_cases<mtk::chopfp::RZ, float>() {
-	std::vector<test_case<float>> test_cases;
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		0
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		100
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000001'1000000000000u,
-		0b0'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000001'0000000000000u,
-		0b0'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000000'1000000000000u,
-		0b0'01111111'0000000000'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'1111111111'1000000000000u,
-		0b0'01111111'1111111111'0000000000000u,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<float>> make_test_cases<mtk::chopfp::RU, float>() {
-	std::vector<test_case<float>> test_cases;
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		0
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		100
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000000'0000000000000u,
-		0b0'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'1111111111'0000000000000u,
-		0b0'10000000'0000000000'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b1'01111111'0000000000'0000000000000u,
-		0b1'01111111'0000000000'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b1'01111111'1111111111'0000000000000u,
-		0b1'01111111'1111111111'0000000000000u,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<float>> make_test_cases<mtk::chopfp::RD, float>() {
-	std::vector<test_case<float>> test_cases;
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		0
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'00000000000000000000000u,
-		0b0'01111111'00000000000000000000000u,
-		100
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'0000000000'0000000000000u,
-		0b0'01111111'0000000000'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b0'01111111'1111111111'0000000000000u,
-		0b0'01111111'1111111111'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b1'01111111'0000000000'0000000000000u,
-		0b1'01111111'0000000001'0000000000000u,
-		10
-	});
-	test_cases.push_back(test_case<float>{
-		0b1'01111111'1111111111'0000000000000u,
-		0b1'10000000'0000000000'0000000000000u,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<double>> make_test_cases<mtk::chopfp::RN, double>() {
-	std::vector<test_case<double>> test_cases;
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		100
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000001'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000010'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'1111111111'100000000000000000000000000000000000000000lu,
-		0b0'10000000000'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<double>> make_test_cases<mtk::chopfp::RN_01, double>() {
-	std::vector<test_case<double>> test_cases;
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		100
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000001'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000010'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'1111111111'100000000000000000000000000000000000000000lu,
-		0b0'10000000000'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<double>> make_test_cases<mtk::chopfp::RZ, double>() {
-	std::vector<test_case<double>> test_cases;
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		100
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000001'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'1111111111'100000000000000000000000000000000000000000lu,
-		0b0'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<double>> make_test_cases<mtk::chopfp::RU, double>() {
-	std::vector<test_case<double>> test_cases;
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		100
-	});
-	test_cases.push_back(test_case<double>{
-		0b1'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		0b1'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b1'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		0b1'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		0b0'10000000000'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-
-	return test_cases;
-}
-
-template <>
-std::vector<test_case<double>> make_test_cases<mtk::chopfp::RD, double>() {
-	std::vector<test_case<double>> test_cases;
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000000000000000000000000000000000000000000000lu,
-		100
-	});
-	test_cases.push_back(test_case<double>{
-		0b1'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		0b1'01111111111'0000000001'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b1'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		0b1'10000000000'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		0b0'01111111111'0000000000'000000000000000000000000000000000000000000lu,
-		10
-	});
-	test_cases.push_back(test_case<double>{
-		0b0'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		0b0'01111111111'1111111111'000000000000000000000000000000000000000000lu,
-		10
-	});
-
-	return test_cases;
-}
+#ifdef TEST_BINARY16
+#include "binary16_testcases.hpp"
+#endif
+#include "binary32_testcases.hpp"
+#include "binary64_testcases.hpp"
 
 template <mtk::chopfp::rounding_type rounding, class T>
 void test() {
-	std::printf("test for (%6s, %5s)... ", get_type_name_string<T>().c_str(), get_rounding_name_string(rounding).c_str());
+	std::printf("test for (%9s, %5s)... ", get_type_name_string<T>().c_str(), get_rounding_name_string(rounding).c_str());
 	const auto test_cases = make_test_cases<rounding, T>();
 	const auto num_correct = check<rounding>(test_cases);
 	std::printf(" %u / %lu ", num_correct, test_cases.size());
@@ -445,13 +88,21 @@ void test() {
 
 int main() {
 	test<mtk::chopfp::RN   , float >();
-	test<mtk::chopfp::RN   , double>();
 	test<mtk::chopfp::RN_01, float >();
-	test<mtk::chopfp::RN_01, double>();
 	test<mtk::chopfp::RZ   , float >();
-	test<mtk::chopfp::RZ   , double>();
 	test<mtk::chopfp::RU   , float >();
-	test<mtk::chopfp::RU   , double>();
 	test<mtk::chopfp::RD   , float >();
+
+	test<mtk::chopfp::RN   , double>();
+	test<mtk::chopfp::RN_01, double>();
+	test<mtk::chopfp::RZ   , double>();
+	test<mtk::chopfp::RU   , double>();
 	test<mtk::chopfp::RD   , double>();
+#ifdef TEST_BINARY16
+	test<mtk::chopfp::RN   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RN_01, CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RZ   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RU   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::RD   , CHOPFP_BINARY16_TYPENAME>();
+#endif
 }

@@ -42,9 +42,9 @@ FUNC_MACRO inline typename same_size_uint<T>::type reinterpret_as_uint(const T f
 	return detail::reinterpret_medium<T, typename same_size_uint<T>::type>{.fp = fp}.bs;
 }
 
-template <class T>
-FUNC_MACRO inline typename same_size_fp<T>::type reinterpret_as_fp(const T bs) {
-	return detail::reinterpret_medium<typename same_size_fp<T>::type, T>{.bs = bs}.fp;
+template <class T, class FP_T = typename same_size_fp<T>::type>
+FUNC_MACRO inline FP_T reinterpret_as_fp(const T bs) {
+	return detail::reinterpret_medium<FP_T, T>{.bs = bs}.fp;
 }
 
 template <class T>
