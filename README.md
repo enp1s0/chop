@@ -39,11 +39,12 @@ The function `chop<r>(const T v, const unsigned l)` chops a given floating point
 ```cpp
 // sample.cpp
 #include <chopfp/chopfp.hpp>
-#include <chopfp/binary16.hpp>
 
 // Specify the type name of binary16 if you want to change from default name.
 // The default name is `half`.
 #define CHOPFP_BINARY16_TYPENAME __fp16
+
+#include <chopfp/binary16.hpp>
 
 int main() {
 	const __fp16 a = 1.f / 3;
