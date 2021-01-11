@@ -147,7 +147,7 @@ std::vector<test_case<CHOPFP_BINARY16_TYPENAME>> make_test_cases<mtk::chopfp::RU
 }
 
 template <>
-std::vector<test_case<CHOPFP_BINARY16_TYPENAME>> make_test_cases<mtk::chopfp::RZ, CHOPFP_BINARY16_TYPENAME>() {
+std::vector<test_case<CHOPFP_BINARY16_TYPENAME>> make_test_cases<mtk::chopfp::RD, CHOPFP_BINARY16_TYPENAME>() {
 	std::vector<test_case<CHOPFP_BINARY16_TYPENAME>> test_cases;
 	test_cases.push_back(test_case<CHOPFP_BINARY16_TYPENAME>{
 		0b0'01111'0000000000u,
