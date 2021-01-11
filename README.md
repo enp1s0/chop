@@ -13,7 +13,7 @@ This library supports these roungings:
 - C++ >= 17 (This library uses `if constexpr`)
 
 ## Supported device
-- CPUs (tested on x86_64)
+- CPUs (tested on x86_64, arm)
 - GPUs (tested on NVIDIA GPU)
 
 ## Supported floating point format
