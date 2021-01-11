@@ -23,8 +23,8 @@ std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) 
 }
 
 template <class T> std::string get_type_name_string();
-template <> std::string get_type_name_string<float >() {return "float" ;}
-template <> std::string get_type_name_string<double>() {return "double";}
+template <> std::string get_type_name_string<float >() {return "binary32";}
+template <> std::string get_type_name_string<double>() {return "binary64";}
 
 template <class T>
 struct test_case {
@@ -431,7 +431,7 @@ std::vector<test_case<double>> make_test_cases<mtk::chopfp::RD, double>() {
 
 template <mtk::chopfp::rounding_type rounding, class T>
 void test() {
-	std::printf("test for (%6s, %5s)... ", get_type_name_string<T>().c_str(), get_rounding_name_string(rounding).c_str());
+	std::printf("test for (%9s, %5s)... ", get_type_name_string<T>().c_str(), get_rounding_name_string(rounding).c_str());
 	const auto test_cases = make_test_cases<rounding, T>();
 	const auto num_correct = check<rounding>(test_cases);
 	std::printf(" %u / %lu ", num_correct, test_cases.size());
