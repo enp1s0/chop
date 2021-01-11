@@ -26,6 +26,10 @@ template <class T> std::string get_type_name_string();
 template <> std::string get_type_name_string<float >() {return "binary32";}
 template <> std::string get_type_name_string<double>() {return "binary64";}
 
+#ifdef TEST_BINARY16
+template <> std::string get_type_name_string<CHOPFP_BINARY16_TYPENAME>() {return "binary16";}
+#endif
+
 template <class T>
 struct test_case {
 	using bs_t = typename mtk::chopfp::detail::same_size_uint<T>::type;
@@ -59,6 +63,7 @@ unsigned check(const std::vector<test_case<T>>& test_cases) {
 template <mtk::chopfp::rounding_type rounding, class T>
 std::vector<test_case<T>> make_test_cases();
 
+#include "binary16_testcases.hpp"
 #include "binary32_testcases.hpp"
 #include "binary64_testcases.hpp"
 
