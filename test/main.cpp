@@ -111,6 +111,7 @@ int main() {
 	test<mtk::chopfp::RZ   , double>();
 	test<mtk::chopfp::RU   , double>();
 	test<mtk::chopfp::RD   , double>();
+	test<mtk::chopfp::SR_1 , double>();
 #ifdef TEST_BINARY16
 	test<mtk::chopfp::RN   , CHOPFP_BINARY16_TYPENAME>();
 	test<mtk::chopfp::RN_01, CHOPFP_BINARY16_TYPENAME>();
