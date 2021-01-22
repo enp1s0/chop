@@ -1,6 +1,7 @@
 #ifndef __MTK_CHOP_DETAIL_UTILS_HPP__
 #define __MTK_CHOP_DETAIL_UTILS_HPP__
 #include <cstdint>
+#include <cfloat>
 #include "macro.hpp"
 
 namespace mtk {
@@ -36,6 +37,11 @@ template <class T>
 FUNC_MACRO inline unsigned get_bias();
 template <> FUNC_MACRO inline unsigned get_bias<float >() {return 0x7f;}
 template <> FUNC_MACRO inline unsigned get_bias<double>() {return 0x3ff;}
+
+template <class T>
+FUNC_MACRO inline T get_machine_epsilon();
+template <> FUNC_MACRO inline float  get_machine_epsilon<float >() {return FLT_EPSILON;}
+template <> FUNC_MACRO inline double get_machine_epsilon<double>() {return DBL_EPSILON;}
 
 template <class T>
 FUNC_MACRO inline typename same_size_uint<T>::type reinterpret_as_uint(const T fp) {
