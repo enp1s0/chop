@@ -20,6 +20,8 @@ std::string get_rounding_name_string(const mtk::chopfp::rounding_type rounding) 
 		return "RU";
 	case mtk::chopfp::RD:
 		return "RD";
+	case mtk::chopfp::SR_1:
+		return "SR_1";
 	default:
 		return "Unknown";
 	}
@@ -50,13 +52,23 @@ unsigned check(const std::vector<test_case<T>>& test_cases) {
 	for (const auto& test_case : test_cases) {
 		const auto chopped = mtk::chopfp::detail::reinterpret_as_uint(mtk::chopfp::chop<rounding>(mtk::chopfp::detail::reinterpret_as_fp<typename mtk::chopfp::detail::same_size_uint<T>::type, T>(test_case.input), test_case.leaving_length));
 		const auto expected = test_case.output;
-		const auto result = (expected == chopped);
+		bool result;
+		if (rounding == mtk::chopfp::rounding_type::SR_1) {
+			result = std::abs(mtk::chopfp::detail::reinterpret_as_fp<T>(chopped)) <= std::abs(mtk::chopfp::detail::reinterpret_as_fp<T>(expected) * (1. + mtk::chopfp::detail::get_machine_epsilon<T>() * (1lu << (mtk::chopfp::detail::get_mantissa_size<T>() - test_case.leaving_length))));
+		} else {
+			result = (expected == chopped);
+		}
 		if (result) {
 			num_correct++;
 		} else {
 			std::printf("! - FAILED -\n");
 			std::printf("INPUT    : ");mtk::chopfp::debug::print_bin(test_case.input);
-			std::printf("EXPECTED : ");mtk::chopfp::debug::print_bin(expected);
+			if (rounding == mtk::chopfp::rounding_type::SR_1) {
+				std::printf("BOUND    : ");
+			} else {
+				std::printf("EXPECTED : ");
+			}
+			mtk::chopfp::debug::print_bin(expected);
 			std::printf("CHOPPED  : ");mtk::chopfp::debug::print_bin(chopped);
 		}
 	}
@@ -92,6 +104,7 @@ int main() {
 	test<mtk::chopfp::RZ   , float >();
 	test<mtk::chopfp::RU   , float >();
 	test<mtk::chopfp::RD   , float >();
+	test<mtk::chopfp::SR_1 , float >();
 
 	test<mtk::chopfp::RN   , double>();
 	test<mtk::chopfp::RN_01, double>();
