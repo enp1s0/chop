@@ -10,6 +10,7 @@
 #include "detail/ru.hpp"
 #include "detail/rd.hpp"
 #include "detail/sr_1.hpp"
+#include "detail/sr_2.hpp"
 
 namespace mtk {
 namespace chopfp {
@@ -19,7 +20,8 @@ enum rounding_type {
 	RZ,
 	RU,
 	RD,
-	SR_1
+	SR_1,
+	SR_2
 };
 
 template <rounding_type rounding, class T>
@@ -45,7 +47,12 @@ FUNC_MACRO T chop(const T v, const unsigned leaving_length) {
 	} else if constexpr (rounding == rounding_type::RD) {
 		result = detail::chop_rd(v, leaving_length);
 	} else if constexpr (rounding == rounding_type::SR_1) {
-		result = detail::chop_sr_1(v, leaving_length, [](const typename mtk::chopfp::detail::same_size_uint<T>::type a) {
+		result = detail::chop_sr_1(v, leaving_length, [](const typename mtk::chopfp::detail::same_size_uint<T>::type, const unsigned) {
+					std::mt19937_64 mt(std::random_device{}());
+					return static_cast<typename mtk::chopfp::detail::same_size_uint<T>::type>(mt());
+				});
+	} else if constexpr (rounding == rounding_type::SR_2) {
+		result = detail::chop_sr_2(v, leaving_length, [](const typename mtk::chopfp::detail::same_size_uint<T>::type, const unsigned) {
 					std::mt19937_64 mt(std::random_device{}());
 					return static_cast<typename mtk::chopfp::detail::same_size_uint<T>::type>(mt());
 				});
@@ -67,6 +74,8 @@ FUNC_MACRO T chop(const T v, const unsigned leaving_length, RandFunc rand_func) 
 	T result = static_cast<T>(0);
 	if constexpr (rounding == rounding_type::SR_1) {
 		result = detail::chop_sr_1(v, leaving_length, rand_func);
+	} else if constexpr (rounding == rounding_type::SR_2) {
+		result = detail::chop_sr_2(v, leaving_length, rand_func);
 	}
 	return result;
 }
