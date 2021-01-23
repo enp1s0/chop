@@ -118,5 +118,6 @@ int main() {
 	test<mtk::chopfp::RZ   , CHOPFP_BINARY16_TYPENAME>();
 	test<mtk::chopfp::RU   , CHOPFP_BINARY16_TYPENAME>();
 	test<mtk::chopfp::RD   , CHOPFP_BINARY16_TYPENAME>();
+	test<mtk::chopfp::SR_1 , CHOPFP_BINARY16_TYPENAME>();
 #endif
 }
