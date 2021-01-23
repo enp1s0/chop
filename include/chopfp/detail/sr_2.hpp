@@ -1,5 +1,5 @@
-#ifndef __MTK_CHOP_DETAIL_SR_1_HPP__
-#define __MTK_CHOP_DETAIL_SR_1_HPP__
+#ifndef __MTK_CHOP_DETAIL_SR_2_HPP__
+#define __MTK_CHOP_DETAIL_SR_2_HPP__
 #include <cmath>
 #include "macro.hpp"
 #include "utils.hpp"
@@ -8,16 +8,14 @@ namespace mtk {
 namespace chopfp {
 namespace detail {
 template <class T, class RandFunc>
-FUNC_MACRO T chop_sr_1(const T v, const unsigned leaving_length, RandFunc rand_func) {
+FUNC_MACRO T chop_sr_2(const T v, const unsigned leaving_length, RandFunc rand_func) {
 	const unsigned shift = detail::get_mantissa_size<T>() - leaving_length;
 	const auto bs_mantissa_0 = detail::mask_mantissa(v);
 	const auto bs_mantissa = bs_mantissa_0 | (decltype(bs_mantissa_0)(1) << detail::get_mantissa_size<T>());
 
 	auto move_up = 0;
-	const auto cut_off = bs_mantissa - ((bs_mantissa >> shift) << shift);
 	const typename mtk::chopfp::detail::same_size_uint<T>::type rand = rand_func(bs_mantissa, leaving_length);
-	const auto threshold = rand - ((rand >> shift) << shift);
-	if (cut_off >= threshold) {
+	if ((rand & 0x1) == 0x1) {
 		move_up = 1;
 	}
 

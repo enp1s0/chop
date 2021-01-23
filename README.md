@@ -8,6 +8,8 @@ This library supports these roungings:
 - [x] `RZ` (IEEE 754, Toward 0)
 - [x] `RU` (IEEE 754, Toward +Inf)
 - [x] `RD` (IEEE 754, Toward -Inf)
+- [x] `SR_1` (Stochastic Rounding - mode 1 / experimentally)
+- [x] `SR_2` (Stochastic Rounding - mode 2 / experimentally)
 
 ## Requirements
 - C++ >= 17 (This library uses `if constexpr`)
@@ -17,7 +19,7 @@ This library supports these roungings:
 - GPUs (tested on NVIDIA GPU)
 
 ## Supported floating point format
-- `half` (IEEE 754 Binary16, availbale if compiler supports it)
+- `half` (IEEE 754 Binary16, available if compiler supports it)
 - `float` (IEEE 754 Binary32)
 - `double` (IEEE 754 Binary64)
 
