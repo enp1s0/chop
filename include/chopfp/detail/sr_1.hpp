@@ -15,7 +15,7 @@ FUNC_MACRO T chop_sr_1(const T v, const unsigned leaving_length, RandFunc rand_f
 
 	auto move_up = 0;
 	const auto cut_off = bs_mantissa - ((bs_mantissa >> shift) << shift);
-	const typename mtk::chopfp::detail::same_size_uint<T>::type rand = rand_func(bs_mantissa);
+	const typename mtk::chopfp::detail::same_size_uint<T>::type rand = rand_func(bs_mantissa, leaving_length);
 	const auto threshold = rand - ((rand >> shift) << shift);
 	if (cut_off >= threshold) {
 		move_up = 1;

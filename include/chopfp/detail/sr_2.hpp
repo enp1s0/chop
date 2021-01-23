@@ -14,7 +14,7 @@ FUNC_MACRO T chop_sr_2(const T v, const unsigned leaving_length, RandFunc rand_f
 	const auto bs_mantissa = bs_mantissa_0 | (decltype(bs_mantissa_0)(1) << detail::get_mantissa_size<T>());
 
 	auto move_up = 0;
-	const typename mtk::chopfp::detail::same_size_uint<T>::type rand = rand_func(bs_mantissa);
+	const typename mtk::chopfp::detail::same_size_uint<T>::type rand = rand_func(bs_mantissa, leaving_length);
 	if ((rand & 0x1) == 0x1) {
 		move_up = 1;
 	}
