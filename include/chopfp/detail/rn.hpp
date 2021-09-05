@@ -13,9 +13,10 @@ FUNC_MACRO T chop_rn(const T v, const unsigned leaving_length) {
 	const auto bs_mantissa_0 = detail::mask_mantissa(v);
 	const auto bs_mantissa = bs_mantissa_0 | (decltype(bs_mantissa_0)(1) << detail::get_mantissa_size<T>());
 
+	const auto u2 = (bs_mantissa & ((decltype(bs_mantissa_0)(1) << (shift - 1)) - 1)) ? 1 : 0;
 	const auto u1 = (bs_mantissa >> (shift - 1)) & 0x1;
 	const auto u0 = (bs_mantissa >> (shift    )) & 0x1;
-	const auto move_up = u1 & u0;
+	const auto move_up = u1 & u2 & u0;
 
 	// Move up if necessary
 	const auto result_bs_mantissa_0 = ((bs_mantissa >> shift) + move_up) << shift;
